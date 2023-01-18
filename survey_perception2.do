@@ -1,4 +1,4 @@
-*missing values
+*replacing missing values
 replace Q1_Ethnicity= "." if missing(Q1_Ethnicity)
 replace Q2_Residence= "." if missing(Q2_Residence)
 replace Q3_Edu= "." if missing(Q3_Edu)
@@ -47,6 +47,7 @@ replace Q14_b_perc= "som_agree" if Q14_b_perc== "Somewhat agree"
 replace Q14_b_perc= "stro_dis" if Q14_b_perc== "Strongly disagree"
 replace Q14_b_perc= "som_dis" if Q14_b_perc== "Somewhat disagree"
 
+*Replacing missing values 
 gen v_sev= .
 gen v_wor=.
 gen v_saf=.
@@ -140,20 +141,6 @@ label values age age
 
 
 
-*2 indepednet sample t test with v_perc and exposures, 2 independent smple ttesy with 
-*Compares averages for two groups CANT WORK 
-*We used this test given that
-the assumptions for independence was satisfied, CLT was satisfied for plasma glucose
-concentration, and the assumption of equal variance was met. Background information on the
-data collection methods does not point to a paired or matched data, so we assumed independence
-for diabetes and non-diabetes participants who had their plasma glucose concentrations
-measured. Total sample size for the two groups was greater than 30 and there were no particular
-extreme outliers, so CLT was satisfied. We conducted an f-test using alpha 0.01 to check the
-equal variance assumption for plasma glucose concentration among diabetes and no diabetes
-groups. If the resulting p value was &gt;0.05, we concluded equal variance, but if the p value was
-&lt;0.05, we conclude unequal variance.
-b_perc and exposures 
-
 *ANOVA with the rest
 oneway v_perc Q5_Gender
 oneway v_perc gender
@@ -172,19 +159,18 @@ oneway b_stat gender
 oneway b_stat age
 oneway b_stat edu
 
-***b_stat and gender= pvalue= 0.045= borderline significance
-***info and age=0.048= borderline significnace 
-***info and gender= 0.0502 not significant 
-
 oneway info gender 
 oneway info age 
 oneway info edu 
 
-*ON new dataset with deleted missing: NO change in pvalues 
+***b_stat and gender= pvalue= 0.045= borderline significance
+***info and age=0.048= borderline significnace 
+***info and gender= 0.0502 not significant 
 
-*Tukey test with significant ones. CAN'T do this 
 
- 
+*Logistic regression on significant relationships: CAN'T do this!!! 
+
+ Data Visualization procedure: 
 *Demographic info on expsoures  or pie chart?
 graph bar (count), over(gender) title(Gender)
 graph bar (count), over(age) title(Agegroup)
