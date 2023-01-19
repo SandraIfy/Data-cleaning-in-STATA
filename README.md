@@ -1,5 +1,5 @@
 # Data-cleaning-in-STATA
-Here, I prepared a survey dataset for analysis by deleting incomplete observations, labelling variables. Also created charts and graphs for data visualization
+Here, I prepared a survey dataset for analysis by labelling missing values, dropping incomplete observations, creating new variables from existing ones etc. Also created charts and graphs for data visualization
 
 Description of the dataset: The dataset contains responses from a reserach survey to assess how South East Asians in Bexar County perceive the covid-19 vaccine and booster shot. 
 
