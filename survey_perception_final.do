@@ -47,7 +47,9 @@ replace Q14_b_perc= "som_agree" if Q14_b_perc== "Somewhat agree"
 replace Q14_b_perc= "stro_dis" if Q14_b_perc== "Strongly disagree"
 replace Q14_b_perc= "som_dis" if Q14_b_perc== "Somewhat disagree"
 
-*Replacing missing values 
+*generating new variables to replace Q8 to Q14..etc so that it is clear that they are different questions 
+*Next, I generate a variable called v_perc (Virus perception) that will be the combined sum of v_sev, v_wor and v_saf
+*Also generating a variable called b_perc (Booster perception) that will be the combined sum of b_saf, b_eff, n_eff and b_var
 gen v_sev= .
 gen v_wor=.
 gen v_saf=.
@@ -58,7 +60,7 @@ gen b_var=.
 gen n_eff=.
 gen b_perc= .
 
-
+*Converting Likert scale responses for v_sev, v_wor, v-saf, b_saf, b_eff, b_var and n_eff from string to numeric datatypes (where Strongly disagree= -2 and strongly agree=2)
 replace v_sev= -2 if Q8_vir_perc== "stro_dis"
 replace v_sev= -1 if Q8_vir_perc== "som_dis"
 replace v_sev= 0 if Q8_vir_perc==  "Neither agree nor disagree"
@@ -96,10 +98,20 @@ replace n_eff= 1 if Q14_b_perc== "som_agree"
 replace n_eff= 2 if Q14_b_perc== "stro_agree"
 
 *summing v_perc & b_perc 
+*A positive value for v_perc tells us that ???? while a negative value for v_perc tells us  ??????
+*A nagative value for b_perc tells us that ???? while a negative value for b_perc tells us  ??????
 replace v_perc= v_sev + v_wor + v_saf
 replace b_perc= b_saf + b_eff + b_var + n_eff
 
-
+*Creating new replica variables from existing ones and Label defining categorical variables
+gen info=.
+replace info= 0 if Q16_Information== "news"
+replace info= 1 if Q16_Information== "social media"
+replace info= 2 if Q16_Information== "internet"
+replace info= 3 if Q16_Information== "govt health"
+replace info= 4 if Q16_Information== "fam"
+replace info = 5 if Q16_Information== "multiple"
+replace info = 6 if Q16_Information== "unclassified"
 label define info 0 "news" 1 "social media" 2 "internet" 3 "govt health" 4 "fam" 5 "multiple" 6 "unclassified"
 label values info info 
 
@@ -141,7 +153,7 @@ label values age age
 
 
 
-*ANOVA with the rest
+*Using ANOVA test to compare differences in v_perc, b_perc, vac_stat, b_stat and info responses by gender, age and edu
 oneway v_perc Q5_Gender
 oneway v_perc gender
 oneway v_perc age 
@@ -166,44 +178,49 @@ oneway info edu
 ***b_stat and gender= pvalue= 0.045= borderline significance
 ***info and age=0.048= borderline significnace 
 ***info and gender= 0.0502 not significant 
+***NO strong statistical significance in ANOVA tests!!
 
+*Logistic regression?: CAN'T do this!!! 
 
-*Logistic regression on significant relationships: CAN'T do this!!! 
-
- Data Visualization procedure: 
-*Demographic info on expsoures  or pie chart?
+ *Data Visualization procedure: 
+ 
+*Demographic statistics (bar graphs):
 graph bar (count), over(gender) title(Gender)
 graph bar (count), over(age) title(Agegroup)
 graph bar (count), over(edu) title(Education level)
 
-*observed trend 
+*Bar Graphs showing v_perc responses by gendr, age, and edu
 graph hbar v_perc, over (gender)
 graph hbar v_perc, over (age)
 graph hbar v_perc, over (edu)
 
+*Bar Graphs showing b_perc responses by gender, age, and edu
 graph hbar b_perc, over (gender)
 graph hbar b_perc, over (age)
 graph hbar b_perc, over (edu)
 
+*Box plots showing v_perc responses by gendr, age, and edu
 graph hbox v_perc, over(age) ytitle(Increasing concern about virus) title(Virus perception by age)
 graph hbox v_perc, over(edu) ytitle(Increasing concern about virus) title(Virus perception by edu level)
 graph hbox v_perc, over(gender) ytitle(Increasing concern about virus) title(Virus perception by gender)
 
+*Box plots showing b_perc responses by gendr, age, and edu
 graph hbox b_perc, over(age) ytitle(Increasing confidence in booster) title(Booster perception by age)
 graph hbox b_perc, over(edu) ytitle(Increasing confidence in booster) title(Booster perception by edu level)
 graph hbox b_perc, over(gender) ytitle(Increasing confidence in booster) title(Booster perception by gender)
 
 *Categorical vs Categorical 
-
+*Bar Graphs showing vac_stat responses by gender, age, and edu
 graph hbar, over(vac_stat) by(, title(Vaccination status by gender)) by(gender)
 graph hbar, over(vac_stat) by(, title(Vaccination status by age)) by(age)
 graph hbar, over(vac_stat) by(, title(Vaccination status by education level)) by(edu)
 
-
+*Bar Graphs showing b_stat responses by gender, age, and edu
 graph hbar, over(b_stat) by(, title(Booster status by gender)) by(gender)
 graph hbar, over(b_stat) by(, title(Booster status by age)) by(age)
 graph hbar, over(b_stat) by(, title(Booster status by education level)) by(edu)
 
+*Bar Graphs showing info responses by gender, age, and edu
 graph hbar, over(info) by(, title(Covid information source by gender)) by(gender)
 graph hbar, over(info) by(, title(Covid information source by age)) by(age)
 graph hbar, over(info) by(, title(Covid information source by education level)) by(edu)
