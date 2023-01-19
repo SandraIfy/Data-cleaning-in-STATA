@@ -15,6 +15,23 @@ replace Q13_b_perc = "." if missing(Q13_b_perc)
 replace Q14_b_perc= "." if missing(Q14_b_perc)
 replace Q16_Information = "." if missing(Q16_Information)
 
+*drop missing observations 
+drop if Q5_Gender== "."
+drop if Q6_Vac_stat== "."
+drop if Q7_B_stat== "."
+drop if Q8_vir_perc == "."
+drop if Q9_vir_perc== "."
+drop if Q10_vir_perc== "."
+drop if Q11_b_perc== "."
+drop if Q12_b_perc == "."
+drop if Q13_b_perc == "."
+drop if Q14_b_perc == "."
+drop if Q3_Edu== "."
+drop if Q2_Residence== "."
+drop if Q4_Age== "."
+drop if Q1_Ethnicity== "."
+drop if Q16_Information== "."
+
 *fix long texts 
 replace Q6_Vac_stat= "2_Pfizer" if Q6_Vac_stat== "2 shots of Pfizer"
 replace Q6_Vac_stat= "2_Moderna" if Q6_Vac_stat== "2 shots of Moderna"
@@ -97,9 +114,7 @@ replace n_eff= 0 if Q14_b_perc==  "Neither agree nor disagree"
 replace n_eff= 1 if Q14_b_perc== "som_agree"
 replace n_eff= 2 if Q14_b_perc== "stro_agree"
 
-*summing v_perc & b_perc 
-*A positive value for v_perc tells us that ???? while a negative value for v_perc tells us  ??????
-*A nagative value for b_perc tells us that ???? while a negative value for b_perc tells us  ??????
+*Creating v_perc & b_perc from sum of existing variables  
 replace v_perc= v_sev + v_wor + v_saf
 replace b_perc= b_saf + b_eff + b_var + n_eff
 
@@ -150,7 +165,6 @@ replace age= 2 if Q4_Age== "31-50"
 replace age= 3 if Q4_Age== "51-70"
 label define age 1 "18-30" 2 "31-50" 3 "51-70"
 label values age age 
-
 
 
 *Using ANOVA test to compare differences in v_perc, b_perc, vac_stat, b_stat and info responses by gender, age and edu
