@@ -32,6 +32,9 @@ drop if Q4_Age== "."
 drop if Q1_Ethnicity== "."
 drop if Q16_Information== "."
 
+*inclusion criteria- drop non-inclusive 
+drop if Q2_Residence== "No"
+
 *fix long texts 
 replace Q6_Vac_stat= "2_Pfizer" if Q6_Vac_stat== "2 shots of Pfizer"
 replace Q6_Vac_stat= "2_Moderna" if Q6_Vac_stat== "2 shots of Moderna"
